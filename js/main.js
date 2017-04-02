@@ -40,6 +40,8 @@ function setMap(){
         .await(callback);
 
     function callback(error, csvData, states){
+        //create the color scale
+        var colorScale = makeColorScale(csvData);
 
         //translate US topojson
         var unitedStates = topojson.feature(states, states.objects.states).features;
@@ -48,7 +50,7 @@ function setMap(){
         unitedStates = joinData(unitedStates, csvData);
 
         //add enumeration units to the map
-        setEnumerationUnits(unitedStates, map, path);
+        setEnumerationUnits(unitedStates, map, path, colorScale);
     };
 }; //goodbye setmap
 
@@ -81,16 +83,58 @@ function joinData(unitedStates, csvData){
     return unitedStates;
 };
 
-function setEnumerationUnits(unitedStates, map, path){
+//function to create units to be used to display choropleth
+function setEnumerationUnits(unitedStates, map, path, colorScale){
+
     //add states to map
-        var states = map.selectAll(".states")
-            .data(unitedStates)
-            .enter()
-            .append("path")
-            .attr("class", function(d){
-                return "states " + d.properties.name;
-            })
-            .attr("d", path);
+    var states = map.selectAll(".states")
+        .data(unitedStates)
+        .enter()
+        .append("path")
+        .attr("class", function(d){
+            return "states " + d.properties.name;
+        })
+        .attr("d", path)
+        .style("fill", function(d){
+            return choropleth(d.properties, colorScale);
+        });
+};
+
+//function to create color scale generator
+function makeColorScale(data){
+    var colorClasses = [
+        "#D4B9DA",
+        "#C994C7",
+        "#DF65B0",
+        "#DD1C77",
+        "#980043"
+    ];
+
+    //create color scale generator
+    var colorScale = d3.scaleQuantile()
+        .range(colorClasses);
+
+    //build two-value array of minimum and maximum expressed attribute values
+    var minmax = [
+        d3.min(data, function(d) { return parseFloat(d[expressed]); }),
+        d3.max(data, function(d) { return parseFloat(d[expressed]); })
+    ];
+    //assign two-value array as scale domain
+    colorScale.domain(minmax);
+
+    return colorScale;
+};
+
+//function to test for data value and return color
+function choropleth(props, colorScale){
+    //make sure attribute value is a number
+    var val = parseFloat(props[expressed]);
+    //if attribute value exists, assign a color; otherwise assign gray
+    if (typeof val == 'number' && !isNaN(val)){
+        return colorScale(val);
+    } else {
+        return "#CCC";
+    };
 };
 
 })();
