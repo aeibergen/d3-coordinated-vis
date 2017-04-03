@@ -32,7 +32,7 @@
 }
 
 .states {
-    stroke: #000;
+    stroke: #ffffff;
     stroke-width: 0.5px;
     stroke-linecap: round;
 }
@@ -52,6 +52,7 @@
     font-family: sans-serif;
     font-size: 1em;
     font-weight: bold;
+    color: #404244;
 }
 
 .chartBackground {
@@ -59,9 +60,10 @@
 }
 
 .chartFrame {
+    border: thin solid #999;
     fill: none;
     stroke: #999;
-    stroke-width: 3px;
+    stroke-width: 1px;
     shape-rendering: crispEdges;
 }
 
