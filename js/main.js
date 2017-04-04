@@ -133,7 +133,7 @@ function setEnumerationUnits(unitedStates, map, path, colorScale){
 
     //add style descriptor to each path
     var desc = states.append("desc")
-        .text('{"stroke": "#ffffff", "stroke-width": "0.5px"}');
+        .text('{"stroke": "#cecece", "stroke-width": "0.5px"}');
 };
 
 //function to create color scale generator
@@ -365,7 +365,7 @@ function dehighlight(props){
 function setLabel(props){
     //label content
     var labelAttribute = "<h1>" + props[expressed] +
-        "</h1><b>" + expressed + "</b>";
+        "</h1>";
 
     //create info label div
     var infolabel = d3.select("body")
