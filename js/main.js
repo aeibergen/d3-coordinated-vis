@@ -7,7 +7,7 @@
 //pseudo-global variables
 var attrArray = ["Adults Who Consume Fruit Less than Once Daily", "Adults Who Consume Vegetables Less than Once Daily", 
 "Adults Who Exercise for at Least 150 Minutes Per Week", "Adults Who Engage in No Exercise",
- "Adults Who are Overweight", "Adults Who are Obese"];
+ "Adults Who Are Overweight", "Adults Who Are Obese"];
 var expressed = attrArray[0]; //initial attribute
 
 //chart frame dimensions
@@ -24,6 +24,9 @@ var chartWidth = window.innerWidth * 0.425,
 var yScale = d3.scaleLinear()
     .range([463, 0])
     .domain([0, 110]);
+
+var NewYork = "New York";
+NewYork.replace(/ /g, "_")
 
 //begin script when window loads
 window.onload = setMap();
@@ -114,18 +117,19 @@ function setEnumerationUnits(unitedStates, map, path, colorScale){
         .enter()
         .append("path")
         .attr("class", function(d){
-            return "states " + d.properties.name;
+            return "states " + d.properties.name.replace(/ /g, "_");
         })
         .attr("d", path)
         .style("fill", function(d){
             return choropleth(d.properties, colorScale);
         })
-        .on("mouseover", function(d){
+                .on("mouseover", function(d){
             highlight(d.properties);
         })
         .on("mouseout", function(d){
             dehighlight(d.properties);
-        });
+        })
+        .on("mousemove", moveLabel);
 
     //add style descriptor to each path
     var desc = states.append("desc")
@@ -195,11 +199,6 @@ function setChart(csvData, colorScale){
         .attr("height", chartInnerHeight)
         .attr("transform", translate);
 
-    //create a scale to size bars proportionally to frame and for axis
-    var yScale = d3.scaleLinear()
-        .range([463, 0])
-        .domain([0, 100]);
-
     //set bars for each province
     var bars = chart.selectAll(".bar")
         .data(csvData)
@@ -209,18 +208,19 @@ function setChart(csvData, colorScale){
             return b[expressed]-a[expressed]
         })
         .attr("class", function(d){
-            return "bar " + d.name;
+            return "bar " + d.name.replace(/ /g, "_");
         })
         .attr("width", chartInnerWidth / csvData.length - 1)
         .on("mouseover", highlight)
-        .on("mouseout", dehighlight);
+        .on("mouseout", dehighlight)
+        .on("mousemove", moveLabel);
 
     //create a text element for the chart title
     var chartTitle = chart.append("text")
         .attr("x", 40)
         .attr("y", 40)
         .attr("class", "chartTitle")
-        .text("Percent of" + expressed);
+        .text("Percent of " + expressed);
 
     //create vertical axis generator
     var yAxis = d3.axisLeft()
@@ -324,20 +324,22 @@ function updateChart(bars, n, colorScale){
 
     //add text to chart title
     var chartTitle = d3.select(".chartTitle")
-        .text("Percent of" + expressed);
+        .text("Percent of " + expressed);
 };
 
 //function to highlight enumeration units and bars
 function highlight(props){
     //change stroke
-    var selected = d3.selectAll("." + props.name)
-        .style("stroke", "blue")
+    var selected = d3.selectAll("." + props.name.replace(/ /g, "_"))
+        .style("stroke", "black")
         .style("stroke-width", "2");
+
+    setLabel(props);
 };
 
 //function to reset the element style on mouseout
 function dehighlight(props){
-    var selected = d3.selectAll("." + props.name)
+    var selected = d3.selectAll("." + props.name.replace(/ /g, "_"))
         .style("stroke", function(){
             return getStyle(this, "stroke")
         })
@@ -352,9 +354,53 @@ function dehighlight(props){
 
         var styleObject = JSON.parse(styleText);
 
+    d3.select(".infolabel")
+        .remove();
+
         return styleObject[styleName];
     };
+};
 
+//function to create dynamic label
+function setLabel(props){
+    //label content
+    var labelAttribute = "<h1>" + props[expressed] +
+        "</h1><b>" + expressed + "</b>";
+
+    //create info label div
+    var infolabel = d3.select("body")
+        .append("div")
+        .attr("class", "infolabel")
+        .attr("id", props.name + "_label")
+        .html(labelAttribute);
+
+    var regionName = infolabel.append("div")
+        .attr("class", "labelname")
+        .html(props.name);
+};
+
+//function to move info label with mouse
+function moveLabel(){
+    //get width of label
+    var labelWidth = d3.select(".infolabel")
+        .node()
+        .getBoundingClientRect()
+        .width;
+
+    //use coordinates of mousemove event to set label coordinates
+    var x1 = d3.event.clientX + 10,
+        y1 = d3.event.clientY - 75,
+        x2 = d3.event.clientX - labelWidth - 10,
+        y2 = d3.event.clientY + 25;
+
+    //horizontal label coordinate, testing for overflow
+    var x = d3.event.clientX > window.innerWidth - labelWidth - 20 ? x2 : x1; 
+    //vertical label coordinate, testing for overflow
+    var y = d3.event.clientY < 75 ? y2 : y1; 
+
+    d3.select(".infolabel")
+        .style("left", x + "px")
+        .style("top", y + "px");
 };
 
 })();

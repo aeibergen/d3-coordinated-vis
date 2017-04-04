@@ -103,9 +103,10 @@ option {
     height: 50px;
     min-width: 100px;
     color: #fff;
-    background-color: #000;
-    border: solid thin #fff;
+    background-color: #4b4d4f;
+    border: solid thin #a4a5a5;
     padding: 5px 10px;
+    top: -75px;
 }
 
 .infolabel h1 {
