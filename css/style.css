@@ -5,30 +5,6 @@ March 8, 2017*/
 	background-color: gray;
 }
 
-.axis path,
-.axis line {
-    fill: none;
-    stroke: black;
-    stroke-width: 1px;
-    shape-rendering: crispEdges;
-}
-
-.axis text {
-    font-family: "Lora", serif;
-    font-size: 0.9em;
-}
-
-.title {
-    font-family: "Lora", serif;
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.labels {
-	font-family: "Lora", serif;
-	font-size: .9em;
-}
-
 .map {
     border: medium solid #999;
     margin: 10px 0 0 20px;
@@ -41,12 +17,6 @@ March 8, 2017*/
     stroke-linecap: round;
 }
 
-.numbers {
-    fill: white;
-    font-family: "Lora", serif;
-    font-size: 8px;
-}
-
 .chart {
     float: right;
     margin: 7px 20px 0 0;
@@ -55,8 +25,8 @@ March 8, 2017*/
 .chartTitle {
     font-family: "Lora", serif;
     font-size: 1em;
+    color: #15243d;
     font-weight: bold;
-    color: #404244;
 }
 
 .chartBackground {
@@ -87,12 +57,13 @@ March 8, 2017*/
 
 .dropdown {
     position: absolute;
-    top: 90px;
-    left: 40px;
+    top: 130px;
+    left: 35px;
     z-index: 10;
     font-family: "Lora", serif;
     font-size: 1em;
     font-weight: bold;
+    color: #15243d;
     padding: 2px;
     border: 1px solid #999;
     box-shadow: 2px 2px 4px #999;
@@ -113,9 +84,10 @@ option {
     top: -75px;
     font-size: 14px;
     font-family: "Lora", serif;
+    box-shadow: 1px 1px 2px #999;
 }
 
-.infolabel h1 {
+.infolabel h2 {
     margin: 0 20px 0 0;
     padding: 0;
     display: inline-block;
@@ -127,18 +99,31 @@ h1 {
     font-family: "Oswald", sans-serif;
     text-transform: uppercase;
     text-align: center;
-    margin: 10px 0 10px 0;
+    font-size: 40px;
+    margin: 10px 0 5px 0;
+    color: #15243d;
 }
 
 p {
-    position: absolute;
-    top: 575px;
     font-family: "Lora", serif;
-    margin: 0 20px 0 20px;
+    margin: 0 20px 15px 20px;
     text-indent: 40px;
     color: #555555;
+    line-height: 1.5;
+}
+
+h3 {
+    margin: 20px 20px 20px 20px;
+
+}
+
+blockquote {
+    font-family: "Lora", serif;
+    color: #555555;
+    line-height: 1.5;
 }
 
 body {
     background: url(/img/satinweave.png) repeat 0 0;
+    height: 1200px;
 }

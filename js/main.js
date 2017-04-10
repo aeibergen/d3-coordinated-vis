@@ -364,8 +364,8 @@ function dehighlight(props){
 //function to create dynamic label
 function setLabel(props){
     //label content
-    var labelAttribute = "<h1>" + props[expressed] +
-        "</h1>";
+    var labelAttribute = "<h2>" + props[expressed] +
+        "</h2>";
 
     //create info label div
     var infolabel = d3.select("body")
